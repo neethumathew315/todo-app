@@ -1,0 +1,128 @@
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f4f6f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Card */
+main {
+    background: white;
+    padding: 25px;
+    width: 420px;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+h2 {
+    margin-bottom: 10px;
+    color: #555;
+}
+
+/* Input area */
+section div {
+    display: flex;
+    gap: 10px;
+}
+
+input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    outline: none;
+}
+
+input:focus {
+    border-color: #4CAF50;
+}
+
+/* Add button */
+#add-button {
+    padding: 10px 15px;
+    border: none;
+    background: #4CAF50;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#add-button:hover {
+    background: #45a049;
+}
+
+/* List */
+ul {
+    list-style: none;
+    margin-top: 20px;
+}
+
+/* List item */
+li {
+    background: #f1f3f6;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Text */
+li span {
+    flex: 1;
+}
+
+/* Complete button */
+li button:first-of-type {
+    background: #2196F3;
+    color: white;
+    border: none;
+    padding: 5px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+li button:first-of-type:hover {
+    background: #1976D2;
+}
+
+/* Delete button */
+li button:last-of-type {
+    background: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 5px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+li button:last-of-type:hover {
+    background: #e60000;
+}
+
+/* Completed task style */
+.completed span {
+    text-decoration: line-through;
+    color: gray;
+}
+
+.completed {
+    background: #e0e0e0;
+}
