@@ -1,128 +1,275 @@
 /* Reset */
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-body {
-    font-family: Arial, Helvetica, sans-serif;
-    background: #f4f6f9;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+/* Variables */
+
+:root {
+    --background: #f5f7fb;
+    --surface: #ffffff;
+
+    --text-primary: #111827;
+    --text-secondary: #6b7280;
+
+    --primary-color: #4f46e5;
+
+    --border-color: #e5e7eb;
+
+    --danger-color:#ff0000;
+
+    --radius: 12px;
+
+    --space-sm: 0.5rem;
+    --space-md: 1rem;
+    --space-lg: 1.5rem;
+    --space-xl: 2rem;
+
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+
 }
 
-/* Card */
-main {
-    background: white;
-    padding: 25px;
-    width: 420px;
-    border-radius: 12px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+/* Body */
+
+body {
+    font-family: system-ui, sans-serif;
+    margin: 0;
+    min-height: 100vh; /* Full screen height */
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: flex-start; /* Keep content at the top */
+    background: var(--background);
+    color: var(--text-primary);
 }
+
+/* Typography */
 
 h1 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: #333;
+    font-size: var(--space-xl);
+    font-weight: 700;
 }
 
 h2 {
-    margin-bottom: 10px;
-    color: #555;
+    font-size: var(--space-lg);
+    font-weight: 600;
 }
 
-/* Input area */
-section div {
+h3 {
+    font-size: var(--space-md);
+    font-weight: 600;
+}
+
+p {
+    color: var(--text-secondary);
+}
+
+/* Main Layout */
+
+main {
+    max-width: 1000px;
+    width: 100%;
+    padding: var(--space-md);
     display: flex;
-    gap: 10px;
+    flex-direction: column;
+    gap: var(--space-xl);
 }
 
-input {
+/* Header */
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Task Creation Card */
+
+.task-creation {
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: var(--space-lg);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-sm);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+
+/* Statistics */
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-md);
+}
+
+.stat-card {
+    padding: var(--space-lg);
+    text-align: center;
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Task Controls */
+
+.task-controls {
+    display: flex;
+    gap: var(--space-lg);
+    align-items: center;
+}
+
+#searchInput {
     flex: 1;
-    padding: 10px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    outline: none;
 }
 
-input:focus {
-    border-color: #4CAF50;
+/* Task List */
+
+/* empty-state  */
+
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-lg);
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-sm);
 }
 
-/* Add button */
-#add-button {
-    padding: 10px 15px;
-    border: none;
-    background: #4CAF50;
-    color: white;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: bold;
+/* Task Card */
+
+.task-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 1px solid var(--border-color);
+    padding: var(--space-md);
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.2s ease,
+                box-shadow 0.2s ease;
+
 }
 
-#add-button:hover {
-    background: #45a049;
+.task-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
 }
 
-/* List */
-ul {
-    list-style: none;
-    margin-top: 20px;
-}
-
-/* List item */
-li {
-    background: #f1f3f6;
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 8px;
+.task-info {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: var(--space-md);
 }
 
-/* Text */
-li span {
-    flex: 1;
+.task-details {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
 }
 
-/* Complete button */
-li button:first-of-type {
-    background: #2196F3;
-    color: white;
-    border: none;
-    padding: 5px 8px;
-    border-radius: 6px;
+.task-meta {
+    display: flex;
+    gap: var(--space-lg);
+}
+
+.task-actions {
+    display: flex;
+    gap: var(--space-lg);
+}
+
+
+/* input and select */
+
+input,select {
+    border: 1px solid var(--border-color) ;
+    padding: var(--space-md);
+    border-radius:var(--radius) ;
+    background:var(--surface) ;
+    transition: border-color 0.2s ease;
+}
+
+input:focus,
+select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+input,
+select,
+button {
+    font: inherit;
+}
+
+/* Buttons */
+
+button {
     cursor: pointer;
-}
-
-li button:first-of-type:hover {
-    background: #1976D2;
-}
-
-/* Delete button */
-li button:last-of-type {
-    background: #ff4d4d;
-    color: white;
     border: none;
-    padding: 5px 8px;
-    border-radius: 6px;
-    cursor: pointer;
+    border-radius: var(--radius);
+    padding: var(--space-sm) var(--space-md);
 }
 
-li button:last-of-type:hover {
-    background: #e60000;
+#themeButton {
+    background: var(--surface);
 }
 
-/* Completed task style */
-.completed span {
-    text-decoration: line-through;
-    color: gray;
+#addTaskBtn {
+    background: var(--primary-color);
+    color: white;
 }
 
-.completed {
-    background: #e0e0e0;
+#addTaskBtn:hover {
+    opacity: 0.9;
+}
+
+.edit-btn {
+    background: var(--surface);
+}
+
+.delete-btn {
+    background: var(--danger-color);
+}
+
+
+/* Responsive Design */
+
+@media (max-width: 768px) {
+    .stats {
+        grid-template-columns: 1fr;
+    }
+
+    .task-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .task-meta {
+        flex-direction: column;
+        gap: var(--space-sm);
+    }
+
+    #searchInput,
+    .task-controls select {
+        width: 100%;
+    }
 }

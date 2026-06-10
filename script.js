@@ -1,65 +1,88 @@
+const taskForm = document.getElementById("task-form");
 const inputText = document.getElementById("input-text");
-
 const addButton = document.getElementById("add-button");
+const listItems = document.getElementById("list-items");
 
-const listItems = document.getElementById("list-items")
+const taskData = [];
+let currentTask = {};
 
-//Enter key support
+const reset = () => {
+    inputText.value = "";
+    currentTask = {};
 
-inputText.addEventListener("keydown", (e)=> {
-    if(e.key === "Enter"){
-        addButton.click();
-    }
-});
+}
 
 
-// Add Task
 
-addButton.addEventListener("click", ()=>{
+// Add or update task
+const addOrUpdateTask = () => {
     const input = inputText.value.trim();
 
     if(!input){
         alert("Please enter list items");
         return;
+    }
+
+    const dataArrIndex = taskData.findIndex(
+        (item) => item.id === currentTask.id
+    );
+
+    const taskObj = {
+        id: `${input.toLowerCase().split(" ").join("-")}-${Date.now()}`,
+        title: input
     };
 
+    if (dataArrIndex === -1) {
+        taskData.unshift(taskObj);
+    } else {
+        taskData[dataArrIndex] = taskObj;
+    }
 
+    updateTaskContainer();
+    reset();
+};
 
-    const li = document.createElement("li");
+// Update UI
+const updateTaskContainer = () => {
+    listItems.innerHTML = ""; 
 
-    const span = document.createElement("span");
-    span.textContent = input;
+    taskData.forEach(({id,title}) => {
+        const li = document.createElement("li");
+        li.id = `${id}`;
+        li.className = "task";
 
-    //complete button
-    const completeBtn = document.createElement("button");
-    completeBtn.textContent = " ✔ ";
+        const span = document.createElement("span");
+        span.textContent = title;
 
+        const completeBtn = document.createElement("button");
+        completeBtn.textContent = "✔";
 
-    //delete button
-    const deleteButton = document.createElement("button");
-    deleteButton.textContent = " x ";
+        const editBtn = document.createElement("button");
+        editBtn.textContent = "✏️";
 
-    li.append(span, completeBtn, deleteButton);
+        const deleteButton = document.createElement("button");
+        deleteButton.textContent = "x";
+
+        li.append(span, completeBtn, editBtn, deleteButton);
+        listItems.appendChild(li);
+    });
+
+};
+
+// Add Task
+addButton.addEventListener("click", () => {
+    addOrUpdateTask();
     
-    listItems.appendChild(li);
-
-    inputText.value = "";
-    inputText.focus();
 });
 
-
-listItems.addEventListener("click", (e) => {
-    const li = e.target.closest("li");
-
-    if(!li) return;
-
-    if(e.target.textContent === " ✔ ") {
-        li.classList.toggle("completed");
-
-    }
-
-    if(e.target.textContent === " x ") {
-        li.remove();
-    }
-
+completeBtn.addEventListener((e) => {
+    completeTask(e.target.closest("li"));
 });
+
+const completeTask = (task) => {
+    task.classList.toggle("completed");
+}
+
+
+
+
