@@ -1,87 +1,180 @@
-const taskForm = document.getElementById("task-form");
-const inputText = document.getElementById("input-text");
-const addButton = document.getElementById("add-button");
-const listItems = document.getElementById("list-items");
+//DOM Selections
 
-const taskData = [];
-let currentTask = {};
-
-const reset = () => {
-    inputText.value = "";
-    currentTask = {};
-
-}
+const taskForm = document.getElementById("taskForm");
+const taskInput = document.getElementById("taskInput");
+const category = document.getElementById("categorySelect");
+const priority = document.getElementById("prioritySelect");
+const dueDate = document.getElementById("dueDate");
 
 
+const emtyState = document.querySelector(".empty-state");
+const taskContainer =document.getElementById("taskContainer");
 
-// Add or update task
-const addOrUpdateTask = () => {
-    const input = inputText.value.trim();
 
-    if(!input){
-        alert("Please enter list items");
+//states
+let taskData = [];
+
+
+//events
+
+//Add task from submit
+
+taskForm.addEventListener("submit", (e)=> {
+
+    e.preventDefault();
+
+    const inputTask = taskInput.value.trim();
+
+    if(!inputTask) {
+        return
+    }
+
+    const taskObj = {
+        id: Date.now(),
+        title: inputTask,
+        category: category.value || "No category",
+        priority: priority.value || "No priority",
+        dueDate: dueDate.value || "No dueDate",
+        completed: false
+    }
+
+    taskData.push(taskObj);
+
+    //reset the form
+
+    taskForm.reset();
+    renderTasks();
+});
+
+
+//completed task
+
+taskContainer.addEventListener("change", (e)=> {
+
+    if(!e.target.classList.contains("task-check")){
         return;
     }
 
-    const dataArrIndex = taskData.findIndex(
-        (item) => item.id === currentTask.id
-    );
+    const taskId = Number(e.target.getAttribute("data-id"));
 
-    const taskObj = {
-        id: `${input.toLowerCase().split(" ").join("-")}-${Date.now()}`,
-        title: input
-    };
+   const particularTask = taskData.find((item)=> item.id === taskId);
+   particularTask.completed = e.target.checked;
 
-    if (dataArrIndex === -1) {
-        taskData.unshift(taskObj);
-    } else {
-        taskData[dataArrIndex] = taskObj;
+   renderTasks();
+
+   console.log(taskData)
+});
+
+
+//delete task
+
+taskContainer.addEventListener("click", (e)=> {
+    if(!e.target.classList.contains("delete-btn")){
+        return;
     }
 
-    updateTaskContainer();
-    reset();
-};
+    const taskId = Number(e.target.getAttribute("data-id"));
+    taskData = taskData.filter((elem)=> elem.id !== taskId);
 
-// Update UI
-const updateTaskContainer = () => {
-    listItems.innerHTML = ""; 
+    renderTasks();
+});
 
-    taskData.forEach(({id,title}) => {
-        const li = document.createElement("li");
-        li.id = `${id}`;
-        li.className = "task";
 
-        const span = document.createElement("span");
-        span.textContent = title;
+//functions
 
-        const completeBtn = document.createElement("button");
-        completeBtn.textContent = "✔";
+//rendering function 
+
+function renderTasks() {
+
+    taskContainer.innerHTML = "";
+
+    if(taskData.length === 0){
+        emtyState.style.display ="flex"
+    }else{
+        emtyState.style.display ="none";
+    }
+
+
+    for(let task of taskData) {
+
+        const taskCard = document.createElement("div");
+        taskCard.classList.add("task-card");
+
+
+        const taskInfo = document.createElement("div");
+        taskInfo.classList.add("task-info");
+
+
+        const checkboxInput = document.createElement("input");
+        checkboxInput.setAttribute("type","checkbox");
+        checkboxInput.setAttribute("data-id", task.id);
+        checkboxInput.checked = task.completed;
+        checkboxInput.classList.add("task-check");
+ 
+
+        const taskDetails = document.createElement("div");
+        taskDetails.classList.add("task-details");
+
+
+        const taskTitle = document.createElement("h3");
+        taskTitle.classList.add("task-title");
+        taskTitle.textContent = task.title;
+
+
+        if(task.completed){
+            taskCard.classList.add("completed-card");
+            taskTitle.classList.add("completed-title");
+        };
+
+
+        const taskMeta = document.createElement("div");
+        taskMeta.classList.add("task-meta");
+
+
+        const taskCategory = document.createElement("p");
+        taskCategory.classList.add("task-category");
+        taskCategory.textContent = `Category: ${task.category}`;
+
+
+        const taskPriority = document.createElement("p");
+        taskCategory.classList.add("task-priority");
+        taskPriority.textContent = `Priority: ${task.priority}`;
+
+
+        const taskDate = document.createElement("p");
+        taskDate.classList.add("task-date");
+        taskDate.textContent = `Due Date: ${task.dueDate}`;
+
+
+        taskMeta.append(taskCategory, taskPriority, taskDate);
+        taskDetails.append(taskTitle, taskMeta);
+        taskInfo.append(checkboxInput, taskDetails);
+
+
+        const taskActions = document.createElement("div");
+        taskActions.classList.add("task-actions");
+
 
         const editBtn = document.createElement("button");
-        editBtn.textContent = "✏️";
+        editBtn.classList.add("edit-btn");
+        editBtn.textContent = "Edit";
 
-        const deleteButton = document.createElement("button");
-        deleteButton.textContent = "x";
 
-        li.append(span, completeBtn, editBtn, deleteButton);
-        listItems.appendChild(li);
-    });
+        const deleteBtn = document.createElement("button");
+        deleteBtn.classList.add("delete-btn");
+        deleteBtn.setAttribute("data-id", task.id);
+        deleteBtn.textContent = "Delete";
 
-};
 
-// Add Task
-addButton.addEventListener("click", () => {
-    addOrUpdateTask();
-    
-});
-
-completeBtn.addEventListener((e) => {
-    completeTask(e.target.closest("li"));
-});
-
-const completeTask = (task) => {
-    task.classList.toggle("completed");
+        taskActions.append(editBtn, deleteBtn);
+        taskCard.append(taskInfo, taskActions);
+        taskContainer.appendChild(taskCard);
+    }
 }
+
+renderTasks();
+
+
 
 
 

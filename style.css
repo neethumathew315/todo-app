@@ -192,10 +192,19 @@ form {
     gap: var(--space-lg);
 }
 
+.completed-card {
+    opacity: 0.6;
+}
+
+.completed-title {
+    text-decoration: line-through;
+}
+
 .task-actions {
     display: flex;
     gap: var(--space-lg);
 }
+
 
 
 /* input and select */
