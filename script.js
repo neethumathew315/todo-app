@@ -10,6 +10,10 @@ const dueDate = document.getElementById("dueDate");
 const emtyState = document.querySelector(".empty-state");
 const taskContainer =document.getElementById("taskContainer");
 
+const totalTasks = document.getElementById("totalTasks");
+const completedTasks = document.getElementById("completedTasks");
+const pendingTasks = document.getElementById("pendingTasks");
+
 
 //states
 let taskData = [];
@@ -170,10 +174,20 @@ function renderTasks() {
         taskCard.append(taskInfo, taskActions);
         taskContainer.appendChild(taskCard);
     }
+
+    updateStats();
 }
 
 renderTasks();
 
+function updateStats() {
+    totalTasks.textContent = taskData.length;
+
+    completedTasks.textContent = taskData.filter((item)=> item.completed).length;
+    
+    pendingTasks.textContent = taskData.filter((item)=> !item.completed).length;
+    
+}
 
 
 
