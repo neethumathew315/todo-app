@@ -14,11 +14,15 @@ const totalTasks = document.getElementById("totalTasks");
 const completedTasks = document.getElementById("completedTasks");
 const pendingTasks = document.getElementById("pendingTasks");
 
+const searchInput = document.getElementById("searchInput");
+
 
 //states
 let taskData = [];
 
 let editingTaskId = null;
+
+let searchTerm = "";
 
 
 //functions
@@ -29,6 +33,9 @@ function renderTasks() {
 
     taskContainer.innerHTML = "";
 
+    const filteredTasks = taskData.filter((item)=> item.title.toLowerCase().includes(searchTerm.toLowerCase()));
+
+
     if(taskData.length === 0){
         emtyState.style.display ="flex"
     }else{
@@ -36,7 +43,7 @@ function renderTasks() {
     }
 
 
-    for(let task of taskData) {
+    for(let task of filteredTasks) {
 
         const taskCard = document.createElement("div");
         taskCard.classList.add("task-card");
@@ -195,8 +202,6 @@ taskForm.addEventListener("submit", (e)=> {
     taskData.push(taskObj);
 
     }
-
-
     saveTasks();
 
     //reset the form
@@ -266,6 +271,11 @@ taskContainer.addEventListener("click", (e)=> {
 
 
 
+searchInput.addEventListener("input", (e)=> {
+    searchTerm = e.target.value.trim();
+
+    renderTasks();
+})
 
 
 
