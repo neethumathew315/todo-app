@@ -18,6 +18,8 @@ const pendingTasks = document.getElementById("pendingTasks");
 //states
 let taskData = [];
 
+let editingTaskId = null;
+
 
 //functions
 
@@ -96,6 +98,7 @@ function renderTasks() {
 
         const editBtn = document.createElement("button");
         editBtn.classList.add("edit-btn");
+        editBtn.setAttribute("data-id", task.id);
         editBtn.textContent = "Edit";
 
 
@@ -168,7 +171,19 @@ taskForm.addEventListener("submit", (e)=> {
         return
     }
 
-    const taskObj = {
+    if(editingTaskId !== null) {
+        const particularTask = taskData.find((item) => item.id === editingTaskId);
+
+        particularTask.title = inputTask;
+        particularTask.category = category.value || "No category";
+        particularTask.priority= priority.value || "No priority";
+        particularTask.dueDate = dueDate.value || "No dueDate";
+
+        editingTaskId = null;
+
+    }else{
+
+        const taskObj = {
         id: Date.now(),
         title: inputTask,
         category: category.value || "No category",
@@ -178,6 +193,9 @@ taskForm.addEventListener("submit", (e)=> {
     }
 
     taskData.push(taskObj);
+
+    }
+
 
     saveTasks();
 
@@ -224,6 +242,27 @@ taskContainer.addEventListener("click", (e)=> {
 
     renderTasks();
 });
+
+//edit task
+
+taskContainer.addEventListener("click", (e)=> {
+    if(!e.target.classList.contains("edit-btn")){
+        return;
+    }
+
+    const taskId = Number(e.target.getAttribute("data-id"));
+
+    const particularTask = taskData.find((item)=> item.id === taskId);
+
+    taskInput.value = particularTask.title;
+    category.value = particularTask.category;
+    priority.value = particularTask.priority;
+    dueDate.value = particularTask.dueDate;
+
+    editingTaskId = taskId;
+
+})
+
 
 
 
