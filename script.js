@@ -19,71 +19,6 @@ const pendingTasks = document.getElementById("pendingTasks");
 let taskData = [];
 
 
-//events
-
-//Add task from submit
-
-taskForm.addEventListener("submit", (e)=> {
-
-    e.preventDefault();
-
-    const inputTask = taskInput.value.trim();
-
-    if(!inputTask) {
-        return
-    }
-
-    const taskObj = {
-        id: Date.now(),
-        title: inputTask,
-        category: category.value || "No category",
-        priority: priority.value || "No priority",
-        dueDate: dueDate.value || "No dueDate",
-        completed: false
-    }
-
-    taskData.push(taskObj);
-
-    //reset the form
-
-    taskForm.reset();
-    renderTasks();
-});
-
-
-//completed task
-
-taskContainer.addEventListener("change", (e)=> {
-
-    if(!e.target.classList.contains("task-check")){
-        return;
-    }
-
-    const taskId = Number(e.target.getAttribute("data-id"));
-
-   const particularTask = taskData.find((item)=> item.id === taskId);
-   particularTask.completed = e.target.checked;
-
-   renderTasks();
-
-   console.log(taskData)
-});
-
-
-//delete task
-
-taskContainer.addEventListener("click", (e)=> {
-    if(!e.target.classList.contains("delete-btn")){
-        return;
-    }
-
-    const taskId = Number(e.target.getAttribute("data-id"));
-    taskData = taskData.filter((elem)=> elem.id !== taskId);
-
-    renderTasks();
-});
-
-
 //functions
 
 //rendering function 
@@ -178,16 +113,121 @@ function renderTasks() {
     updateStats();
 }
 
-renderTasks();
+
+
 
 function updateStats() {
+
     totalTasks.textContent = taskData.length;
 
     completedTasks.textContent = taskData.filter((item)=> item.completed).length;
     
     pendingTasks.textContent = taskData.filter((item)=> !item.completed).length;
     
+};
+
+
+//save tasks to local storage
+
+function saveTasks() {
+    const jsonStringArr = JSON.stringify(taskData);
+    localStorage.setItem("taskData", jsonStringArr);
 }
+
+
+//load tasks from local storage
+
+function loadTasks() {
+    const storedTasks = localStorage.getItem("taskData");
+
+    if (storedTasks){
+        taskData = JSON.parse(storedTasks);
+    }
+
+    renderTasks();
+}
+
+
+//initial rendering
+
+loadTasks();
+
+
+
+//events
+
+//Add task from submit
+
+taskForm.addEventListener("submit", (e)=> {
+
+    e.preventDefault();
+
+    const inputTask = taskInput.value.trim();
+
+    if(!inputTask) {
+        return
+    }
+
+    const taskObj = {
+        id: Date.now(),
+        title: inputTask,
+        category: category.value || "No category",
+        priority: priority.value || "No priority",
+        dueDate: dueDate.value || "No dueDate",
+        completed: false
+    }
+
+    taskData.push(taskObj);
+
+    saveTasks();
+
+    //reset the form
+
+    taskForm.reset();
+    renderTasks();
+
+});
+
+
+//completed task
+
+taskContainer.addEventListener("change", (e)=> {
+
+    if(!e.target.classList.contains("task-check")){
+        return;
+    }
+
+    const taskId = Number(e.target.getAttribute("data-id"));
+
+   const particularTask = taskData.find((item)=> item.id === taskId);
+   particularTask.completed = e.target.checked;
+
+   saveTasks();
+
+   renderTasks();
+
+   console.log(taskData)
+});
+
+
+//delete task
+
+taskContainer.addEventListener("click", (e)=> {
+    if(!e.target.classList.contains("delete-btn")){
+        return;
+    }
+
+    const taskId = Number(e.target.getAttribute("data-id"));
+    taskData = taskData.filter((elem)=> elem.id !== taskId);
+
+    saveTasks();
+
+    renderTasks();
+});
+
+
+
+
 
 
 
