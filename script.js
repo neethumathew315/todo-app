@@ -7,7 +7,9 @@ const priority = document.getElementById("prioritySelect");
 const dueDate = document.getElementById("dueDate");
 
 
-const emtyState = document.querySelector(".empty-state");
+const emptyState = document.querySelector(".empty-state");
+const emptyStateTitle = document.querySelector(".empty-state h3");
+const emptyStateText = document.querySelector(".empty-state p");
 const taskContainer =document.getElementById("taskContainer");
 
 const totalTasks = document.getElementById("totalTasks");
@@ -16,6 +18,8 @@ const pendingTasks = document.getElementById("pendingTasks");
 
 const searchInput = document.getElementById("searchInput");
 
+const filterSelect = document.getElementById("filterSelect");
+
 
 //states
 let taskData = [];
@@ -23,6 +27,8 @@ let taskData = [];
 let editingTaskId = null;
 
 let searchTerm = "";
+
+let filterStatus = "All Tasks";
 
 
 //functions
@@ -33,17 +39,43 @@ function renderTasks() {
 
     taskContainer.innerHTML = "";
 
+    let finalFilteredArr;
+
     const filteredTasks = taskData.filter((item)=> item.title.toLowerCase().includes(searchTerm.toLowerCase()));
 
+    if(filterStatus === "All Tasks") {
+        finalFilteredArr = filteredTasks;
 
-    if(taskData.length === 0){
-        emtyState.style.display ="flex"
-    }else{
-        emtyState.style.display ="none";
+    }else if(filterStatus === "Completed"){
+
+        finalFilteredArr = filteredTasks.filter((item)=> item.completed);
+
+    }else {
+        finalFilteredArr = filteredTasks.filter((item)=> !item.completed);
     }
 
 
-    for(let task of filteredTasks) {
+    if (taskData.length === 0) {
+
+        emptyState.style.display ="flex";
+
+        emptyStateTitle.textContent = "No tasks yet.";
+        emptyStateText.textContent = "Start by adding your first task.";
+
+    }else if (finalFilteredArr.length === 0) {
+
+        emptyState.style.display ="flex";
+        
+        emptyStateTitle.textContent = "No matching tasks found.";
+        emptyStateText.textContent = "Try a different search term.";
+
+    }else {
+
+        emptyState.style.display ="none";
+    }
+
+
+    for(let task of finalFilteredArr) {
 
         const taskCard = document.createElement("div");
         taskCard.classList.add("task-card");
@@ -229,7 +261,6 @@ taskContainer.addEventListener("change", (e)=> {
 
    renderTasks();
 
-   console.log(taskData)
 });
 
 
@@ -279,6 +310,11 @@ searchInput.addEventListener("input", (e)=> {
 
 
 
+filterSelect.addEventListener("change", (e)=> {
 
+    filterStatus = e.target.value;
+
+    renderTasks();
+})
 
 
