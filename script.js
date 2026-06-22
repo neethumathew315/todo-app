@@ -19,6 +19,7 @@ const pendingTasks = document.getElementById("pendingTasks");
 const searchInput = document.getElementById("searchInput");
 
 const filterSelect = document.getElementById("filterSelect");
+const categoryFilter = document.getElementById("categoryFilter");
 
 const clearCompletedBtn = document.getElementById("clearCompletedBtn");
 
@@ -30,6 +31,8 @@ let editingTaskId = null;
 let searchTerm = "";
 
 let filterStatus = "All Tasks";
+
+let categoryStatus = "All Category";
 
 
 //functions
@@ -56,6 +59,13 @@ function renderTasks() {
     }
 
 
+
+    if (categoryStatus !== "All Category") {
+        finalFilteredArr = finalFilteredArr.filter((item) => item.category === categoryStatus);
+
+    }
+
+
     if (taskData.length === 0) {
 
         emptyState.style.display ="flex";
@@ -75,6 +85,8 @@ function renderTasks() {
         emptyState.style.display ="none";
     }
 
+
+    
 
     for(let task of finalFilteredArr) {
 
@@ -324,6 +336,14 @@ clearCompletedBtn.addEventListener("click", ()=> {
     taskData = taskData.filter((item) => !item.completed)
 
     saveTasks();
+
+    renderTasks();
+})
+
+
+categoryFilter.addEventListener("change", (e) => {
+
+    categoryStatus = e.target.value;
 
     renderTasks();
 })
