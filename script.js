@@ -20,6 +20,7 @@ const searchInput = document.getElementById("searchInput");
 
 const filterSelect = document.getElementById("filterSelect");
 const categoryFilter = document.getElementById("categoryFilter");
+const priorityFilter = document.getElementById("priorityFilter");
 
 const clearCompletedBtn = document.getElementById("clearCompletedBtn");
 
@@ -33,6 +34,8 @@ let searchTerm = "";
 let filterStatus = "All Tasks";
 
 let categoryStatus = "All Category";
+
+let priorityStatus = "All Priority";
 
 
 //functions
@@ -63,6 +66,10 @@ function renderTasks() {
     if (categoryStatus !== "All Category") {
         finalFilteredArr = finalFilteredArr.filter((item) => item.category === categoryStatus);
 
+    }
+
+    if (priorityStatus !== "All Priority") {
+        finalFilteredArr = finalFilteredArr.filter((item) => item.priority === priorityStatus);
     }
 
 
@@ -344,6 +351,14 @@ clearCompletedBtn.addEventListener("click", ()=> {
 categoryFilter.addEventListener("change", (e) => {
 
     categoryStatus = e.target.value;
+
+    renderTasks();
+})
+
+
+priorityFilter.addEventListener("change", (e)=> {
+
+    priorityStatus = e.target.value;
 
     renderTasks();
 })
